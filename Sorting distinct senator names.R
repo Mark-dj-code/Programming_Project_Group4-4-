@@ -14,20 +14,22 @@ View(senator_names)
 
 ######## order names alphabetically in new dataframe
 
-senator_names_sorted <- senator_names[order(senator_names$Name),]
+senator_names<- senator_names[order(senator_names$Name),]
 class(senator_names_sorted)
 
-senator_names_sorted <- as.data.frame(senator_names_sorted)
-View(senator_names_sorted)
+senator_names<- as.data.frame(senator_names)
+View(senator_names)
 
-######### create new data framw without duplicate names
+######### create new data frame without duplicate names
 
 install.packages("dplyr")
 library(dplyr)
 
-senator_names_sorted_disitnct <- distinct(senator_names_sorted)
+senator_names <- distinct(senator_names)
 
-View(senator_names_sorted_disitnct)
+View(senator_names)
+ 
+
 
 
 
