@@ -28,7 +28,7 @@ library(dplyr)
 senator_names <- distinct(senator_names)
 
 View(senator_names)
- 
+ View(senators_full_data) 
 
 
 

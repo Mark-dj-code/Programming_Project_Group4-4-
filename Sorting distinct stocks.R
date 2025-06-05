@@ -20,10 +20,9 @@ library(dplyr)
 stocks <- distinct(stocks)
 
 
-##################### get returns for individual ssenators
+##################### get returns for individual senators
 
 
-for
 
 
 
