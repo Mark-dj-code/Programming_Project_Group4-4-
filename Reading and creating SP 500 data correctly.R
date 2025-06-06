@@ -1,0 +1,23 @@
+#############################################################################################
+#######    SORT DATA FRAME BY SENATOR, BY STOCK (TICKER) AND BY YEAR USING TIDYVERSE#########
+#############################################################################################
+
+######## assign market annual return data frame, skip first 15 lines of files (metadata) to get proper
+########## columns names, Actual data strats at line 16
+
+library(readr)
+
+readLines("data/sp-500-historical-annual-returns.csv", n=20)  ##check where data starts
+
+SP_500_annual_returns <- read_csv("data/sp-500-historical-annual-returns.csv" , skip = 15) ##skip metadata
+
+SP_500_annual_returns <- as.data.frame(SP_500_annual_returns) ##set data to class = dataframe
+
+
+
+################## formating date column to only years (date column entries are class == date)
+
+SP_500_annual_returns[,"date"] <- format(SP_500_annual_returns[,"date"], "%Y")
+
+
+

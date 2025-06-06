@@ -2,6 +2,9 @@
 ########### extract senators transaction size ##############
 ############################################################
 
+
+##### #test# extract single transaction soze numeric from character string
+
 library(stringr)
 
 text <- senators_full_data[1,"Trade_Size_USD"]
@@ -18,18 +21,23 @@ numbers_clean <- mean(numbers_clean, na.rm=T)
 print(numbers_clean)
 
 
-############### create numerci = number of rows
+################################## full data complete extraction code######
+###########################################################################
+############### create numeric n  = number of rows + call on stringr library
+
+library(stringr)
 
 n <- nrow(senators_full_data)
 
-################ allocate vectors to later insert in dataframe
+###### allocate space for n dimensional vectors to later insert in data frame
 
 names_vector <- character(n) 
 transaction_size_vector <- numeric(n)
 stocks_vector <- character(n)
 year_vector <- numeric(n)
+return_vector <- numeric(n)
 
-################ add data to vectors from senators full data row by row
+####### add data to vectors from senators full data row by row
 
 for (i in 1:nrow(senators_full_data)) {
   
@@ -37,7 +45,10 @@ for (i in 1:nrow(senators_full_data)) {
   
   stocks_vector[i] <- senators_full_data [i , "Ticker"]
   
-  year_vector[i] <- senators_full_data [i , "Filed"]
+  year_vector[i] <- senators_full_data [i , "Traded"]
+  
+  return_vector[i] <- senators_full_data[i, "excess_return"]
+  
   
       ## extract transaction size for row i, calculate mean
   
@@ -45,9 +56,13 @@ for (i in 1:nrow(senators_full_data)) {
   
   numbers_string <- str_extract_all( text , "\\$?\\d{1,3}(,\\d{3})*(\\.\\d+)?|\\$?\\d+(\\.\\d+)?")[[1]]
   
-  numbers_clean <- as.numeric(gsub("[^0-9]", "" , numbers_string ))
+  # substitute everything that's not a digit between 0 and 9 with nothing 
+  
+  numbers_clean <- as.numeric(gsub("[^0-9]", "" , numbers_string )) 
+  
   
   numbers_clean <- mean(numbers_clean, na.rm=T)
+  
   
       ## assign value of extracted mean to transaction vector row i
   
@@ -57,7 +72,7 @@ for (i in 1:nrow(senators_full_data)) {
 
 
 
-####################### Combine vectors into new data frame
+####### Combine vectors into new data frame
 
 transaction_size_senators <- data.frame(
   
@@ -65,11 +80,48 @@ transaction_size_senators <- data.frame(
   
   Traded_stock = stocks_vector,
   
-  Filing_date = year_vector,
+  Trade_date = year_vector,
   
-  Transaction_Size = transaction_size_vector
+  Transaction_Size = transaction_size_vector,
+  
+  Excess_Return = return_vector
     
     )
 
 View(transaction_size_senators)
  
+############################################################
+#############################################################
+####### change trade date column entries from text string to date format containing only year
+######################################
+
+
+for (i in 1:nrow(transaction_size_senators)) {
+  
+
+    trade_year_str <- str_extract_all(transaction_size_senators[i, "Trade_date"],"\\d{4}" )[[1]]
+
+    if (length(trade_year_str) > 0) {
+      
+      # Store full date from year in temporary date object
+      
+      temporary_full_trade_date <- as.Date(paste0(trade_year_str, "-01-01")) 
+      
+      # assign year only date to row i  date entry
+     transaction_size_senators[i, "Trade_date"] <- format(temporary_full_trade_date, "%Y") 
+     
+    } else {
+      
+      #####to avoid problems with missing data
+      
+     transaction_size_senators[i, "Trade_date"] <- NA
+    }
+  
+  
+}
+
+##################################################################################
+#################################################################################
+
+
+
