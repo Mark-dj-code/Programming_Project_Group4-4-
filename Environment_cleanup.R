@@ -8,3 +8,5 @@ rm(senator_names_sorted_disitnct)
 
 rm(transaction_size)
 
+rm(temporary_full_date)
+

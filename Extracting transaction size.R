@@ -25,6 +25,10 @@ print(numbers_clean)
 ###########################################################################
 ############### create numeric n  = number of rows + call on stringr library
 
+
+
+
+
 library(stringr)
 
 n <- nrow(senators_full_data)
@@ -41,13 +45,29 @@ return_vector <- numeric(n)
 
 for (i in 1:nrow(senators_full_data)) {
   
+  
+  
   names_vector[i] <- senators_full_data[i , "Name"]
   
   stocks_vector[i] <- senators_full_data [i , "Ticker"]
   
   year_vector[i] <- senators_full_data [i , "Traded"]
   
-  return_vector[i] <- senators_full_data[i, "excess_return"]
+    ## make transaction > 0 if purchase, <0 if sale
+  
+          if (senators_full_data[i, "Transaction" ] == "Sale"){
+            
+            return_vector[i] <- -senators_full_data[i, "excess_return"]
+            
+          } else if (senators_full_data[i, "Transaction" ] == "Purchase") {
+            
+            return_vector[i] <- senators_full_data[i, "excess_return"]
+            
+          } else {
+               
+            return_vector[i] <- NA
+            
+            }
   
   
       ## extract transaction size for row i, calculate mean
@@ -89,11 +109,16 @@ transaction_size_senators <- data.frame(
     )
 
 View(transaction_size_senators)
+
+
+
+
  
 ############################################################
-#############################################################
+############################################################
 ####### change trade date column entries from text string to date format containing only year
-######################################
+############################################################
+############################################################
 
 
 for (i in 1:nrow(transaction_size_senators)) {
@@ -120,8 +145,10 @@ for (i in 1:nrow(transaction_size_senators)) {
   
 }
 
-##################################################################################
-#################################################################################
+################################################################################
+################################################################################
+
+
 
 
 
