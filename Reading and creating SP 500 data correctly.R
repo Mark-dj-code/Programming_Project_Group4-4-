@@ -21,3 +21,6 @@ SP_500_annual_returns[,"date"] <- format(SP_500_annual_returns[,"date"], "%Y")
 
 
 
+###### changing value column name
+
+colnames(SP_500_annual_returns)[2] <- "SP_500_return"
