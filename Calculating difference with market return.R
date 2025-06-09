@@ -12,7 +12,7 @@
 ##########################################################
 #
 #
-#     compare senatros yearly weighted average returns to SP 500 data
+#     compare senators yearly weighted average returns to SP 500 data
 #
 #
 #########################################################
@@ -24,7 +24,7 @@ senators_with_totals <- left_join(senators_with_totals, SP_500_annual_returns, b
 
 
 
-#### caluculate percent difference between  yealy SP 500 return (market return) and
+#### calculate percent difference between  yearly SP 500 return (market return) and
 #### senator weighted average yearly return
 
 abnormal_return_size_vector <- numeric(nrow(senators_with_totals))
@@ -33,7 +33,7 @@ for (i in 1:nrow(senators_with_totals)){
   
   abnormal_return_size_vector[i] <- (100*(senators_with_totals[i, "weighted_average_returns" ] -
                                        senators_with_totals[i, "SP_500_return"]) / 
-                                senators_with_totals[i, "SP_500_return"]) 
+                                abs(senators_with_totals[i, "SP_500_return"])) 
   
 }
 
@@ -59,3 +59,18 @@ for (i in 1:nrow(senators_with_totals)){
 
 }
 
+
+### adding column with only numeric abnormal return size (no text, for easy sorting)
+
+for (i in 1:nrow(senators_with_totals)) {
+  
+  senators_with_totals$abnormal_return_numeric[i] <- (100*(senators_with_totals[i, "weighted_average_returns" ] -
+                                                             senators_with_totals[i, "SP_500_return"]) / 
+                                                        abs(senators_with_totals[i, "SP_500_return"])) 
+  
+}
+
+
+### sorting data by descending abnormal return size
+
+senators_with_totals <- arrange(senators_with_totals, desc(abnormal_return_numeric))

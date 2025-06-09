@@ -17,30 +17,7 @@
 ############################################################
 
 
-##### #test# extract single transaction soze numeric from character string
-
-library(stringr)
-
-text <- senators_full_data[1,"Trade_Size_USD"]
-
-numbers_string <- str_extract_all( text , "\\$?\\d{1,3}(,\\d{3})*(\\.\\d+)?|\\$?\\d+(\\.\\d+)?")[[1]]
-
-numbers_clean <- as.numeric(gsub("[^0-9]", "" , numbers_string ))
-
-print(numbers_clean)
-
-class(numbers_clean)
-
-numbers_clean <- mean(numbers_clean, na.rm=T)
-print(numbers_clean)
-
-
-################################## full data complete extraction code######
-###########################################################################
 ############### create numeric n  = number of rows + call on stringr library
-
-
-
 
 
 library(stringr)
