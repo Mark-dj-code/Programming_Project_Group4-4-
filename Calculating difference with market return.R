@@ -74,3 +74,12 @@ for (i in 1:nrow(senators_with_totals)) {
 ### sorting data by descending abnormal return size
 
 senators_with_totals <- arrange(senators_with_totals, desc(abnormal_return_numeric))
+
+
+####### export new table (senators with totals to data folder)
+
+write.csv(senators_with_totals, "data/senators_compared_average_returns.csv")
+
+senators_data <- read.csv("data/senators_compared_average_returns.csv")
+
+

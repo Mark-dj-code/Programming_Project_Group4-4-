@@ -41,7 +41,6 @@ View(senator_names)
 install.packages("dplyr")
 library(dplyr)
 
-dplyr::dis
 
 senator_names <- distinct(senator_names)
 

@@ -56,6 +56,10 @@ senators_operating_years <- distinct(senators_operating_years)
 
 
 
+weighted_average_returns <- numeric(nrow(senators_with_totals))
+
+for (i in 1:nrow(senators_with_totals)) {
+  
 ###### create new data frame containing total transaction size per senator per year (totals)
 
 
@@ -86,10 +90,6 @@ senators_with_totals <- senators_with_totals |>
 
 ### calculate and add weighted average return column to senators with totals
 
-weighted_average_returns <- numeric(nrow(senators_with_totals))
-
-for (i in 1:nrow(senators_with_totals)) {
-  
   weighted_average_returns[i] <- senators_with_totals$yearly_weighted_return[i] / 
                                   senators_with_totals$Total_Transaction[i]
   

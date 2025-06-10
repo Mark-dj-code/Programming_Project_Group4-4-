@@ -3,7 +3,7 @@
 #############################################################################################
 
 ######## assign market annual return data frame, skip first 15 lines of files (metadata) to get proper
-########## columns names, Actual data strats at line 16
+########## columns names, Actual data starts at line 16
 
 library(readr)
 
