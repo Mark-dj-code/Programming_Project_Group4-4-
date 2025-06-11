@@ -11,135 +11,46 @@
 
 
 
-
+##                 Clean Up Data
 ############################################################
 ########### extract senators transaction size ##############
 ############################################################
+########### change trade date format #######################
+############################################################
 
-
-############### create numeric n  = number of rows + call on stringr library
 
 
 library(stringr)
 
-n <- nrow(senators_full_data)
+################## Modify senators_full_data column entries to extract useful data
 
-###### allocate space for n dimensional vectors to later insert in data frame
+### Text date --> Date object
+### Trade size range text --> Numeric mean of trade size boundaries
+### Ecxess return adjusted for type of transaction (sale/ purchase)
 
-names_vector <- character(n) 
-transaction_size_vector <- numeric(n)
-stocks_vector <- character(n)
-year_vector <- numeric(n)
-return_vector <- numeric(n)
-
-####### add data to vectors from senators full data row by row
-
-for (i in 1:nrow(senators_full_data)) {
+senators_full_data <- senators_full_data|>
   
-  
-  
-  names_vector[i] <- senators_full_data[i , "Name"]
-  
-  stocks_vector[i] <- senators_full_data [i , "Ticker"]
-  
-  year_vector[i] <- senators_full_data [i , "Traded"]
-  
-    ## make transaction > 0 if purchase, <0 if sale
-  
-          if (senators_full_data[i, "Transaction" ] == "Sale"){
-            
-            return_vector[i] <- -senators_full_data[i, "excess_return"]
-            
-          } else if (senators_full_data[i, "Transaction" ] == "Purchase") {
-            
-            return_vector[i] <- senators_full_data[i, "excess_return"]
-            
-          } else {
-               
-            return_vector[i] <- NA
-            
-            }
-  
-  
-      ## extract transaction size for row i, calculate mean
-  
-  text <- senators_full_data[i ,"Trade_Size_USD"]
-  
-  numbers_string <- str_extract_all( text , "\\$?\\d{1,3}(,\\d{3})*(\\.\\d+)?|\\$?\\d+(\\.\\d+)?")[[1]]
-  
-  # substitute everything that's not a digit between 0 and 9 with nothing 
-  
-  numbers_clean <- as.numeric(gsub("[^0-9]", "" , numbers_string )) 
-  
-  
-  numbers_clean <- mean(numbers_clean, na.rm=T)
-  
-  
-      ## assign value of extracted mean to transaction vector row i
-  
-  transaction_size_vector[i] <- numbers_clean
-  
-}
-
-
-
-####### Combine vectors into new data frame
-
-transaction_size_senators <- data.frame(
-  
-  Senator_Name = names_vector , 
-  
-  Traded_stock = stocks_vector,
-  
-  Trade_date = year_vector,
-  
-  Transaction_Size = transaction_size_vector,
-  
-  Excess_Return = return_vector
-    
-    )
-
-View(transaction_size_senators)
-
-
-
-
- 
-############################################################
-############################################################
-####### change trade date column entries from text string to date format containing only year
-############################################################
-############################################################
-
-
-for (i in 1:nrow(transaction_size_senators)) {
-  
-
-    trade_year_str <- str_extract_all(transaction_size_senators[i, "Trade_date"],"\\d{4}" )[[1]]
-
-    if (length(trade_year_str) > 0) {
-      
-      # Store full date from year in temporary date object
-      
-      temporary_full_trade_date <- as.Date(paste0(trade_year_str, "-01-01")) 
-      
-      # assign year only date to row i  date entry
-     transaction_size_senators[i, "Trade_date"] <- format(temporary_full_trade_date, "%Y") 
-     
-    } else {
-      
-      #####to avoid problems with missing data
-      
-     transaction_size_senators[i, "Trade_date"] <- NA
-    }
-  
-  
-}
-
-################################################################################
-################################################################################
-
-
+  mutate( Traded = as.Date(Traded, format = "%A, %B %d, %Y"),
+          
+          # add Trade_year column
+          
+          Trade_year = format(Traded, "%Y"),
+         
+         excess_return = ifelse(Trade_Size_USD == "Sale", - abs(excess_return), abs(excess_return) ),
+         
+         Trade_Size_USD = Trade_Size_USD |>
+           str_extract_all( "\\$?\\d{1,3}(,\\d{3})*(\\.\\d+)?|\\$?\\d+(\\.\\d+)?"),
+         
+         # now column is a list, entries are 2 D character vectors containing boundaries the trade size range
+         
+         # modify Trade_Size_USD column to contain numeric mean of range boundaries
+         
+         Trade_Size_USD = sapply(Trade_Size_USD, function(x) {
+           nums <- as.numeric(gsub("[^0-9]", "", x))  # Extract numbers
+           mean(nums, na.rm = TRUE) #calculate mean 
+         })
+         
+           ) 
 
 
 
