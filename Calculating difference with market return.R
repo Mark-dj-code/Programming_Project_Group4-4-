@@ -31,12 +31,12 @@ senators_full_data_grouped <- senators_full_data_grouped |>
   
   mutate(abnormal_return_magnitude = weighted_average_return - SP_500_return,
          
-         abnormal_return_percentage = 100*abnormal_return_magnitude/abs(SP_500_return),
+         abnormal_return_percentage = abnormal_return_magnitude/abs(SP_500_return),
          
          explanation = ifelse (abnormal_return_percentage >0, 
                                paste0(sprintf("%.2f" , abnormal_return_percentage), " % higher"),
-                               paste0(sprintf("%.2f" , abnormal_return_percentage), " % lower")
-                              )
+                               paste0(sprintf("%.2f" , abnormal_return_percentage), " % lower") )
+
         )                      
 #
 

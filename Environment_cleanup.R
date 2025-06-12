@@ -10,4 +10,8 @@ rm(transaction_size)
 
 rm(temporary_full_date)
 
-Check_data_test <- read.csv("data/senators_compared_average_returns.csv")
+ rm(Check_data_test)
+ 
+ rm(names_vector)
+ rm(state_vector) 
+ 

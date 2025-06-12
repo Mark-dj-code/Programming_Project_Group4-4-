@@ -26,7 +26,7 @@ library(stringr)
 
 ### Text date --> Date object
 ### Trade size range text --> Numeric mean of trade size boundaries
-### Ecxess return adjusted for type of transaction (sale/ purchase)
+### Excess return adjusted for type of transaction (sale/ purchase)
 
 senators_full_data <- senators_full_data|>
   
@@ -46,7 +46,7 @@ senators_full_data <- senators_full_data|>
          # modify Trade_Size_USD column to contain numeric mean of range boundaries
          
          Trade_Size_USD = sapply(Trade_Size_USD, function(x) {
-           nums <- as.numeric(gsub("[^0-9]", "", x))  # Extract numbers
+           nums <- as.numeric(gsub("[^0-9]", "", x))  # Extract numbers, replace everything that is not a digit between o and 9 with nothing
            mean(nums, na.rm = TRUE) #calculate mean 
          })
          

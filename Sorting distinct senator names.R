@@ -15,9 +15,9 @@
 
 
 
-###############################
-###upload data as dataframe####
-###############################
+################################
+###upload data as data frame####
+################################
 
 senators_full_data<-read.csv("data/Copyofcongress-trading-all.csv")
 senators_control_data <- read.csv("data/Copyofcongress-trading-all.csv")
