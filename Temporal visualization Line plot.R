@@ -19,11 +19,16 @@ colnames(sp_500_monthly)[2] <- "price"
 
 sp_500_monthly <- sp_500_monthly |>
   mutate(price_prior_month = lag(price),
-         sp_500_monthly_return = 100*((price + Dividend)/price_prior_month -1) )
+         sp_500_monthly_return = 100*((price + Dividend - price_prior_month )/price_prior_month ) )
 
 ## create dataframe with only date and return, remove excess columns
 
 sp_500_monthly_returns <- subset(sp_500_monthly, select = c(Date, sp_500_monthly_return))
+
+## make sure date column is date object
+
+sp_500_monthly_returns <- sp_500_monthly_returns |>
+  mutate(Date =as.Date(Date))
 
 
 
@@ -38,15 +43,21 @@ sp_500_monthly_returns <- subset(sp_500_monthly, select = c(Date, sp_500_monthly
 
 ### add trade month column to senators full data
 
+library(lubridate)
+
+summary(senators_full_data$Trade_Size_USD)
+
 senators_full_data <- senators_full_data |>
-  mutate(Trade_month = format(Traded, "%Y-%m-01")
-         )
+  mutate(Trade_month = floor_date(as.Date(Traded), unit = "month"),
+         scaled_return = excess_return/100)
+         
 
 ## create new data frame with weighted average return per month for entire senate
 
 senators_weighted_average_returns_monthly <- senators_full_data |> 
   group_by(Trade_month) |>
-  summarize(weighted_average_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
+  summarize(total_weight = sum(Trade_Size_USD, na.rm = TRUE),
+            weighted_average_return = sum(Trade_Size_USD*scaled_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
 
 
 ## merge datasets 
@@ -79,12 +90,14 @@ reshaped_monthly_returns <- senators_weighted_average_returns_monthly |>
 
 ###################
 ###################
-# create line plot
+# create line plothttp://127.0.0.1:36957/graphics/30b04e8c-56d1-4efc-98c6-c02448dbabd8.png
 ##################
+
+library(ggplot2)
 
 reshaped_monthly_returns |>
   ggplot( aes(x=Trade_month , y=Return, group=Series, color=Series)) +
   geom_line() 
   
-#
+  #
 

@@ -8,8 +8,8 @@
 ###############################################################################
 ###############################################################################
 
-
-
+library(tidyverse)
+library(dplyr)
 
 
 
@@ -22,6 +22,7 @@
 senators_full_data<-read.csv("data/Copyofcongress-trading-all.csv")
 senators_control_data <- read.csv("data/Copyofcongress-trading-all.csv")
 
+senators_full_data <- distinct(senators_full_data)
 
 ############extract names in separate dataframe
 senator_names <- senators_full_data["Name"]

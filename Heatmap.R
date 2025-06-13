@@ -19,7 +19,7 @@ library(dplyr)
 
 returns_by_state <- senators_full_data |>
   group_by(State) |>
-  summarize(weighted_average_return_per_state = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop")
+  summarize(weighted_average_return_per_state = sum(Trade_Size_USD*scaled_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop")
 
 
 ### new variable is difference between average return per state and average market return
