@@ -2,7 +2,7 @@
 ###############################################################################
 ###############################################################################
 ####                                                                       ####
-####                         STEP          4                               ####
+####                         STEP          5                               ####
 ####                                                                       ####
 ###############################################################################
 ###############################################################################
@@ -20,14 +20,14 @@
 
 ### Merge SP 500 data with senators weighted avg return data
 
-senators_full_data_grouped <- left_join(senators_full_data_grouped, SP_500_annual_returns, by = c("Trade_year"="date"))
+senators_full_data_by_year <- left_join(senators_full_data_by_year, SP_500_annual_returns, by = c("Trade_year"="date"))
 
 
 
 #### calculate percent difference between  yearly SP 500 return (market return) and
 #### senator weighted average yearly return
 
-senators_full_data_grouped <- senators_full_data_grouped |>
+senators_full_data_by_year <- senators_full_data_by_year |>
   
   mutate(abnormal_return_magnitude = weighted_average_return - SP_500_return,
          
@@ -40,6 +40,8 @@ senators_full_data_grouped <- senators_full_data_grouped |>
         )                      
 #
 
+### arrange by abnormal return size
 
+senators_full_data_by_year <- arrange(senators_full_data_by_year, desc(abnormal_return_percentage) )
 
 

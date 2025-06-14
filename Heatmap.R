@@ -34,9 +34,6 @@ returns_by_state <- returns_by_state |>
 
 ####### install shapefile pacakges to get US states Map
 
-install.packages("devtools")
-
-install.packages("rnaturalearth")
 
 devtools::install_github("ropensci/rnaturalearthhires")
 

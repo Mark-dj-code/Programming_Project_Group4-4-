@@ -8,8 +8,25 @@
 ###############################################################################
 ###############################################################################
 
+
+##################### Set up environment, install packages, call on libraries
+
+
+install.packages("devtools")
+install.packages("rnaturalearth")
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("zoo")
+
 library(tidyverse)
 library(dplyr)
+library(stringr)
+library(readr)
+library(lubridate)
+library(tidyr)
+library(ggplot2)
+library(rnaturalearth)
+library(zoo)
 
 
 
@@ -22,24 +39,8 @@ library(dplyr)
 senators_full_data<-read.csv("data/Copyofcongress-trading-all.csv")
 senators_control_data <- read.csv("data/Copyofcongress-trading-all.csv")
 
+#### eliminate duplicate rows
+
 senators_full_data <- distinct(senators_full_data)
 
-############extract names in separate dataframe
-senator_names <- senators_full_data["Name"]
-
-
-######## order names alphabetically in new dataframe
-
-senator_names<- senator_names[order(senator_names$Name),]
-
-
-senator_names<- as.data.frame(senator_names)
-
-######### create new data frame without duplicate names
-
-install.packages("dplyr")
-library(dplyr)
-
-
-senator_names <- distinct(senator_names)
 

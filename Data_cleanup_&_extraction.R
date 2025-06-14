@@ -30,23 +30,22 @@ library(stringr)
 
 senators_full_data <- senators_full_data|>
   
-  mutate( Traded = as.Date(Traded, format = "%A, %B %d, %Y"),
+  mutate( Traded = as.Date(Traded, format = "%A, %B %d, %Y"), # character to date object
           
-          # add Trade_year column
           
-          Trade_year = format(Traded, "%Y"),
+          Trade_year = format(Traded, "%Y"), # new trade_year column
          
-         excess_return = ifelse(Trade_Size_USD == "Sale", - abs(excess_return), abs(excess_return) ),
+         excess_return = ifelse(Trade_Size_USD == "Sale", - abs(excess_return), abs(excess_return) ), # adjust return sign fore sale/purchase
          
          Trade_Size_USD = Trade_Size_USD |>
            str_extract_all( "\\$?\\d{1,3}(,\\d{3})*(\\.\\d+)?|\\$?\\d+(\\.\\d+)?"),
          
-         # now column is a list, entries are 2 D character vectors containing boundaries the trade size range
+         # now  Trade_size_usd column is a list, entries are 2 D character vectors containing boundaries of the trade size range
          
          # modify Trade_Size_USD column to contain numeric mean of range boundaries
          
          Trade_Size_USD = sapply(Trade_Size_USD, function(x) {
-           nums <- as.numeric(gsub("[^0-9]", "", x))  # Extract numbers, replace everything that is not a digit between o and 9 with nothing
+           nums <- as.numeric(gsub("[^0-9]", "", x))  # Extract numbers, replace everything that is not a digit between 0 and 9 with nothing
            mean(nums, na.rm = TRUE) #calculate mean 
          })
          

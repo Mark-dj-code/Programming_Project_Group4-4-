@@ -14,7 +14,6 @@ View(stocks)
 
 ###### eliminate duplicates
 
-install.packages("dplyr")
 library(dplyr)
 
 stocks <- distinct(stocks)
