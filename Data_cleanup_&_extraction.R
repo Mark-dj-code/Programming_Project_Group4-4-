@@ -18,7 +18,7 @@
 ########### change trade date format #######################
 ############################################################
 
-
+library(lubridate)
 
 library(stringr)
 
@@ -27,6 +27,8 @@ library(stringr)
 ### Text date --> Date object
 ### Trade size range text --> Numeric mean of trade size boundaries
 ### Excess return adjusted for type of transaction (sale/ purchase)
+### scale down excess return
+### add trade minth column
 
 senators_full_data <- senators_full_data|>
   
@@ -47,7 +49,13 @@ senators_full_data <- senators_full_data|>
          Trade_Size_USD = sapply(Trade_Size_USD, function(x) {
            nums <- as.numeric(gsub("[^0-9]", "", x))  # Extract numbers, replace everything that is not a digit between 0 and 9 with nothing
            mean(nums, na.rm = TRUE) #calculate mean 
-         })
+         }),
+         
+         scaled_return = excess_return/100, #add scaled return column
+         
+         Trade_month = floor_date(as.Date(Traded), unit = "month") # add trade month column
+         
+         
          
            ) 
 

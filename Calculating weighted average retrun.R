@@ -31,7 +31,7 @@ senators_full_data <- senators_full_data |>
 
 senators_full_data_by_year <- senators_full_data |>
   group_by(Trade_year) |>
-  summarize(weighted_average_return = sum(Trade_Size_USD*scaled_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
+  summarize(weighted_average_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
 
 
  

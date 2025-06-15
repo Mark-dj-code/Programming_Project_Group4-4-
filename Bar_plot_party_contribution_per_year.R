@@ -16,7 +16,7 @@ returns_per_year_per_party <- senators_full_data |>
 
 returns_per_year_per_party <- returns_per_year_per_party |>
   group_by(Trade_year, Party) |>
- summarize(weighted_retrun_per_party = sum(scaled_return*Trade_Size_USD, na.rm=T),
+ summarize(weighted_retrun_per_party = sum(excess_return *Trade_Size_USD, na.rm=T),
            .groups = "drop")
 
 ## add yearly trade size to data frame
@@ -34,9 +34,19 @@ ggplot(returns_per_year_per_party, aes(x = as.factor(Trade_year),
                                        y = contribution_weighted_average_return, 
                                        fill = factor(Party))) +
   
-  geom_col() 
+  geom_col() +
   
-
+  scale_fill_manual(
+    values = c("D" = "blue", "R" = "red", "I" = "green"),  # Custom colors
+    labels = c("Democrats", "Independents" , "Republicans" )    # Custom labels
+  ) +
+  
+  labs(
+    x = "Trade Year",
+    y = "Weighted Average Return\n",
+    title = "Parties contribution to total senate average return",
+    fill = "Political Party"
+  ) 
 
 
 

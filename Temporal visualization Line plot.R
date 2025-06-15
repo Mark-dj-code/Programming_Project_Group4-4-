@@ -74,8 +74,7 @@ library(lubridate)
 
 
 senators_full_data <- senators_full_data |>
-  mutate(Trade_month = floor_date(as.Date(Traded), unit = "month"),
-         scaled_return = excess_return/100)
+  mutate(Trade_month = floor_date(as.Date(Traded), unit = "month"))
          
 
 ## create new data frame with weighted average return per month for entire senate
@@ -83,7 +82,7 @@ senators_full_data <- senators_full_data |>
 senators_weighted_average_returns_monthly <- senators_full_data |> 
   group_by(Trade_month) |>
   summarize(total_weight = sum(Trade_Size_USD, na.rm = TRUE),
-            weighted_average_return = sum(Trade_Size_USD*scaled_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
+            weighted_average_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
 
 
 ## merge datasets 
@@ -143,7 +142,7 @@ reshaped_monthly_returns |>
   
   annotate("text", 
            x = as.Date("2020-03-01"), 
-           y = 9, 
+           y = 500, 
            label = "COVID 19",
            hjust = 1.1, 
            angle = 0, 
