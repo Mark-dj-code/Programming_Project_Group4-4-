@@ -1,5 +1,5 @@
 ---
-title: "Template"
+title: "US Senators Insider Trading"
 author: "Studentnames and studentnumbers here"
 date: "`r Sys.Date()`"
 output: pdf_document
@@ -8,20 +8,34 @@ output: pdf_document
 # Set-up your environment
 
 ```{r package_install, include=FALSE}
+install.packages("devtools")
+install.packages("rnaturalearth")
 install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("zoo")
+
 ```
 
 ```{r packages}
-require(tidyverse)
+library(tidyverse)
+library(dplyr)
+library(stringr)
+library(readr)
+library(lubridate)
+library(tidyr)
+library(ggplot2)
+library(rnaturalearth)
+library(zoo)
+
 ```
 
 # Title Page
 
 Include your names
 
-Include the tutorial group number
+Goup 4 (4)
 
-Include your tutorial lecturer's name
+C. Schouwenaar (Chantal)
 
 # Part 1 - Identify a Social Problem
 
@@ -42,18 +56,23 @@ Include the following:
 Preferably from a URL, but if not, make sure to download the data and store it in a shared location that you can load the data in from. Do not store the data in a folder you include in the Github repository!
 
 ```{r loading_data}
-dataset <- midwest
+senators_full_data<-read.csv("data/Copyofcongress-trading-all.csv")
+SP_500_annual_returns <- read_csv("data/sp-500-historical-annual-returns.csv" , skip = 15) ##skip metadata
+sp_500_monthly <- read.csv("data/sp500_monthly.csv")
 ```
-
-midwest is an example dataset included in the tidyverse package
 
 ## 2.2 Provide a short summary of the dataset(s)
 
 ```{r}
-head(dataset)
+head(senators_full_data)
+head(SP_500_annual_returns)
+head(sp_500_monthly_returns)
+
 ```
 
-In this case we see 28 variables, but we miss some information on what units they are in. We also don't know anything about the year/moment in which this data has been captured.
+For senator_full_data we have 19 variables. Each row represents an individual trade made by a single senator at a given time, and financial information regarding that trade.
+
+For SP_500_annual_returns we have 2 variables
 
 ``` r
 inline_code = TRUE
