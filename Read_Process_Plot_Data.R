@@ -82,8 +82,6 @@ senators_full_data <- senators_full_data|>
           
           Trade_year = format(Traded, "%Y"), # new trade_year column
           
-          excess_return = ifelse(Trade_Size_USD == "Sale", - abs(excess_return), abs(excess_return) ), # adjust return sign fore sale/purchase
-          
           Trade_Size_USD = Trade_Size_USD |>
             str_extract_all( "\\$?\\d{1,3}(,\\d{3})*(\\.\\d+)?|\\$?\\d+(\\.\\d+)?"),
           
@@ -101,8 +99,13 @@ senators_full_data <- senators_full_data|>
           
           
   ) 
+library(data.table)
 
+senators_full_data <- senators_full_data |>
+  filter(Transaction %in% c("Sale", "Sale (Full)"))
 
+senators_full_data <- senators_full_data |>
+  filter(excess_return>=16.1)
 
 
 ###############################################################################
