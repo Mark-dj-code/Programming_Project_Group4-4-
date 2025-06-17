@@ -762,8 +762,32 @@ ggplot(returns_per_year_per_party, aes(x = as.factor(Trade_year),
   ) 
 
 
+###############################################################################
+###############################################################################
+####                                                                       ####
+####                         STEP          12                              ####
+####                                                                       ####
+###############################################################################
+###############################################################################
 
 
+library(tidyverse)
+library(dplyr)
+senators_subpop_high_returns <- senators_full_data |>
+  group_by(Name) |>
+  summarize(weighted_avg_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
+
+senators_subpop_high_returns <- senators_subpop_high_returns |>
+  mutate(Group = ifelse (weighted_avg_return > 100, "Return>100%", "Return<=100"))
+
+ggplot(senators_subpop_high_returns, aes(x = Group)
+                                       ) +
+  
+  geom_bar(fill ="green") +
+  
+  labs(x = "Congress members divided by return size",
+       y = "Number of memebrs",
+       title = "Subpopulation by return groups")
 
 
 
