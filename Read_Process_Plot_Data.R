@@ -99,13 +99,12 @@ senators_full_data <- senators_full_data|>
           
           
   ) 
-library(data.table)
+
+##### we are interested in the realised returns of congress members, therefore we only use Sale transactions --> ignore purchases and exchanges
 
 senators_full_data <- senators_full_data |>
   filter(Transaction %in% c("Sale", "Sale (Full)"))
 
-senators_full_data <- senators_full_data |>
-  filter(excess_return>=16.1)
 
 
 ###############################################################################
@@ -138,7 +137,7 @@ senators_full_data <- senators_full_data |>
 
 senators_full_data_by_year <- senators_full_data |>
   group_by(Trade_year) |>
-  summarize(weighted_average_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
+  summarize(weighted_average_excess_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
 
 
 
@@ -206,7 +205,9 @@ colnames(SP_500_annual_returns)[2] <- "SP_500_return"
 ##########################################################
 #
 #
-#     compare senators yearly weighted average returns to SP 500 data
+#     Sum S&P 500 data to excess return of congress members to get an estimate of the raw return
+# 
+#      since excess return = net return - s&p 500 return
 #
 #
 #########################################################
@@ -223,20 +224,22 @@ senators_full_data_by_year <- left_join(senators_full_data_by_year, SP_500_annua
 
 senators_full_data_by_year <- senators_full_data_by_year |>
   
-  mutate(abnormal_return_magnitude = weighted_average_return - SP_500_return,
+  mutate(net_return_magnitude = weighted_average_excess_return + SP_500_return,
          
-         abnormal_return_percentage = 100*abnormal_return_magnitude/abs(SP_500_return),
+         net_return_percentage = ifelse(SP_500_return > net_return_magnitude,
+                                        -100*abs(SP_500_return - net_return_magnitude)/abs(SP_500_return),
+                                        100*abs(net_return_magnitude - SP_500_return)/abs(SP_500_return)),
          
-         explanation = ifelse (abnormal_return_percentage >0, 
-                               paste0(sprintf("%.2f" , abnormal_return_percentage), " % higher"),
-                               paste0(sprintf("%.2f" , abnormal_return_percentage), " % lower") )
+         explanation = ifelse (net_return_percentage >0, 
+                               paste0(sprintf("%.2f" , net_return_percentage), " % more"),
+                               paste0(sprintf("%.2f" , -net_return_percentage), " % less") )
          
   )                      
 #
 
 ### arrange by abnormal return size
 
-senators_full_data_by_year <- arrange(senators_full_data_by_year, desc(abnormal_return_magnitude ) )
+senators_full_data_by_year <- arrange(senators_full_data_by_year, desc(net_return_magnitude ) )
 
 
 
@@ -267,11 +270,11 @@ senators_full_data_by_year <- arrange(senators_full_data_by_year, desc(abnormal_
 
 ## load monthly sp 500 data 
 
-sp_500_monthly <- read.csv("data/sp500_monthly.csv")
+sp_500_monthly_full_data <- read.csv("data/sp500_monthly.csv")
 
 ## change Date column from characater to date object
 
-sp_500_monthly<- sp_500_monthly |>
+sp_500_monthly_full_data<- sp_500_monthly_full_data |>
   mutate(Date = as.Date(Date))
 
 # month of October is not displayed properly month = 01, instead of month =10 modify that and change it
@@ -282,9 +285,9 @@ position <- 10   # first October is in 10th row of the list
 
 while( position < 1833 ) {
   
-  temporary_date <- sp_500_monthly$Date[position]  
+  temporary_date <- sp_500_monthly_full_data$Date[position]  
   month(temporary_date) <- 10
-  sp_500_monthly$Date[position] <- temporary_date  ## modify temp date month from 01 to 10 then assign back to date vector
+  sp_500_monthly_full_data$Date[position] <- temporary_date  ## modify temp date month from 01 to 10 then assign back to date vector
   
   position <- position +12 ## go 12 month forward
   
@@ -292,17 +295,17 @@ while( position < 1833 ) {
 
 #change column name to something more intuitive
 
-colnames(sp_500_monthly)[2] <- "price"
+colnames(sp_500_monthly_full_data)[2] <- "price"
 
 ## calculate monthly return by using lag function 
 
-sp_500_monthly <- sp_500_monthly |>
+sp_500_monthly_full_data <- sp_500_monthly_full_data |>
   mutate(price_prior_month = lag(price),
          sp_500_monthly_return = 100*((price + Dividend - price_prior_month )/price_prior_month ) )
 
 ## create dataframe with only date and return, remove excess columns
 
-sp_500_monthly_returns <- subset(sp_500_monthly, select = c(Date, sp_500_monthly_return))
+sp_500_monthly_returns <- subset(sp_500_monthly_full_data, select = c(Date, sp_500_monthly_return))
 
 ## make sure date column is date object
 
@@ -337,15 +340,15 @@ senators_full_data <- senators_full_data |>
 
 ## create new data frame with weighted average return per month for entire senate
 
-senators_weighted_average_returns_monthly <- senators_full_data |> 
+senators_weighted_average_excess_returns_monthly <- senators_full_data |> 
   group_by(Trade_month) |>
   summarize(total_weight = sum(Trade_Size_USD, na.rm = TRUE),
-            weighted_average_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
+            weighted_average_excess_return_monthly = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
 
 
 ## merge datasets 
 
-senators_weighted_average_returns_monthly <- senators_weighted_average_returns_monthly |>
+senators_weighted_average_excess_returns_monthly <- senators_weighted_average_excess_returns_monthly |>
   left_join(sp_500_monthly_returns, by = c("Trade_month" = "Date"))
 
 ##############################################################
@@ -364,9 +367,9 @@ senators_weighted_average_returns_monthly <- senators_weighted_average_returns_m
 
 library(tidyr)
 
-reshaped_monthly_returns <- senators_weighted_average_returns_monthly |>
+reshaped_monthly_returns <- senators_weighted_average_excess_returns_monthly |>
   pivot_longer(
-    cols = c(weighted_average_return, sp_500_monthly_return),
+    cols = c(weighted_average_excess_return_monthly, sp_500_monthly_return),
     values_to = "Return",
     names_to = "Series"
   )
@@ -392,11 +395,11 @@ reshaped_monthly_returns |>
     axis.text.x = element_text(angle = 45, hjust = 1) ) + 
   
   scale_color_discrete(name = "Monthly returns on investment\n",
-                       labels = c("sp_500_monthly_return" = "S&P 500" , "weighted_average_return" = "US Senate")) + 
+                       labels = c("sp_500_monthly_return" = "S&P 500\n(risk free return rate)\n" , "weighted_average_excess_return_monthly" = "\nUS Congress\n\n(net return - risk free retrun rate)")) + 
   geom_vline(xintercept = as.Date("2020-03-01"), 
              linetype = "dashed",
              color = "black", 
-             size = 0.1) +
+             linewidth = 0.1) +
   
   annotate("text", 
            x = as.Date("2020-03-01"), 
@@ -414,7 +417,7 @@ reshaped_monthly_returns |>
 ########################## covid 19 Zoom in line plot
 
 
-reshaped_monthly_returns[167:206,] |>
+reshaped_monthly_returns[165:206,] |>
   filter(!is.na(Return)) |> #remove NA returns
   ggplot( aes(x=Trade_month , y=Return, group=Series, color=Series)) +
   geom_line(linewidth = 1.2) +
@@ -427,7 +430,7 @@ reshaped_monthly_returns[167:206,] |>
     axis.text.x = element_text(angle = 45, hjust = 1) ) + 
   
   scale_color_discrete(name = "Monthly returns on investment\n",
-                       labels = c("sp_500_monthly_return" = "S&P 500" , "weighted_average_return" = "US Senate")) + 
+                       labels = c("sp_500_monthly_return" = "S&P 500\n(risk free return rate)\n" , "weighted_average_excess_return_monthly" = "\nUS Congress\n\n(net return - risk free retrun rate)")) + 
   geom_vline(xintercept = as.Date("2020-03-01"), 
              linetype = "dashed",
              color = "black", 
@@ -459,27 +462,27 @@ reshaped_monthly_returns[167:206,] |>
 ###############################################################################
 ###############################################################################
 
-#### Abnormal return magnitude bar chart
+#### net return magnitude bar chart
 
 ggplot(senators_full_data_by_year, aes(x = as.factor(Trade_year),
-                                       y = abnormal_return_magnitude)) +
+                                       y = net_return_magnitude)) +
   
   geom_col() +
   
   labs(x = "\nTrade Year",
-       y = "Abnormal return Magnitude\n",
-       title = "Difference between Senate return and Market return (%)\n")
+       y = "Net return Magnitude\n",
+       title = "Net yearly weighted average US Congress return \n")
 
 #### abnormal return percentage bar chart
 
 
 ggplot(senators_full_data_by_year, aes(x = as.factor(Trade_year),
-                                       y = abnormal_return_percentage)) +
+                                       y = net_return_percentage)) +
   
   geom_col() +
   
   labs(x = "\nTrade Year",
-       y = "Abnormal return Percentage\n",
+       y = "Net return Percentage\n",
        title = "Proportion of market performance achieved by senate (%)\n")
 
 
@@ -497,22 +500,22 @@ ggplot(senators_full_data_by_year, aes(x = as.factor(Trade_year),
 ###############################################################################
 
 
-######## heatmap 2013
+######## heatmap 2019 (highest net return)
 
-########################## 2013 heatmap (abnormal eturnn per state)
+########################## 2013 heatmap (abnormal return per state)
 
-return_per_state_2013 <- senators_full_data |> 
-  filter(Trade_year == "2013")|>
+return_per_state_2019 <- senators_full_data |> 
+  filter(Trade_year == "2019")|>
   group_by(State)|>
-  summarize(weighted_average_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
+  summarize(weighted_average_excess_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
 
-### no need to calculate abnormal return size (ie difference with market return, rankimg would stay the same since for a single year)
+### no need to calculate net return size (ie sum excess return with market return, intensity ranking would stay the same, since for a single year)
 
 ## remove Hawaii and Alaska
 
 ### remove alaska and hawaii
 
-return_per_state_2013 <- return_per_state_2013 |>
+return_per_state_2019 <- return_per_state_2019 |>
   filter(!(State %in% c("Alaska", "Hawaii")))
 
 ####### install shapefile pacakges to get US states Map
@@ -533,9 +536,9 @@ us_states_map = ne_states(country ="united states of america", returnclass = "sf
 
 # merge map and returns per state data
 
-us_states_returns_map_2013 <- us_states_map |>
-  left_join(return_per_state_2013, by = c("name" = "State")) |>
-  mutate(Return = replace_na(weighted_average_return, 0))|> ## replace NA for missing states with 0
+us_states_returns_map_2019 <- us_states_map |>
+  left_join(return_per_state_2019, by = c("name" = "State")) |>
+  mutate(Return = replace_na(weighted_average_excess_return, 0))|> ## replace NA for missing states with 0
   filter(!(name %in% c("Alaska", "Hawaii")))
 
 
@@ -543,10 +546,10 @@ us_states_returns_map_2013 <- us_states_map |>
 
 ### plot heatmap
 
-ggplot(us_states_returns_map_2013, aes(fill = weighted_average_return)) +
-  geom_sf( color = "orange", size = 0.2 ) +
-  scale_fill_gradient(low = "white", high = "red", na.value = "white",
-                      name = "Excess return\nby state in \n2013 (%)"
+ggplot(us_states_returns_map_2019, aes(fill = weighted_average_excess_return)) +
+  geom_sf( color = "navy", size = 0.2 ) +
+  scale_fill_gradient(low = "lightblue", high = "navy", na.value = "white",
+                      name = "Excess return\nby state in \n2019 (%)"
   )
 
 
@@ -564,14 +567,14 @@ ggplot(us_states_returns_map_2013, aes(fill = weighted_average_return)) +
 ###############################################################################
 
 
-########################## 2015 heatmap (abnormal eturnn per state)
+########################## 2015 heatmap (highest net return percentage per state)
 
 return_per_state_2015 <- senators_full_data |> 
   filter(Trade_year == "2015")|>
   group_by(State)|>
-  summarize(weighted_average_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
+  summarize(weighted_average_excess_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
 
-### no need to calculate abnormal return size (ie difference with market return, rankimg would stay the same since for a single year)
+###no need to calculate net return size (ie sum excess return with market return, intensity ranking would stay the same, since for a single year)
 
 ## remove Hawaii and Alaska
 
@@ -600,7 +603,7 @@ us_states_map = ne_states(country ="united states of america", returnclass = "sf
 
 us_states_returns_map_2015 <- us_states_map |>
   left_join(return_per_state_2015, by = c("name" = "State")) |>
-  mutate(Return = replace_na(weighted_average_return, 0))|> ## replace NA for missing states with 0
+  mutate(Return = replace_na(weighted_average_excess_return, 0))|> ## replace NA for missing states with 0
   filter(!(name %in% c("Alaska", "Hawaii")))
 
 
@@ -608,9 +611,9 @@ us_states_returns_map_2015 <- us_states_map |>
 
 ### plot heatmap
 
-ggplot(us_states_returns_map_2015, aes(fill = weighted_average_return)) +
-  geom_sf( color = "orange", size = 0.2 ) +
-  scale_fill_gradient(low = "white", high = "red", na.value = "white",
+ggplot(us_states_returns_map_2015, aes(fill = weighted_average_excess_return)) +
+  geom_sf( color = "navy", size = 0.2 ) +
+  scale_fill_gradient(low = "lightblue", high = "navy", na.value = "white",
                       name = "Excess return\nby state in \n2015 (%)"
   )
 
