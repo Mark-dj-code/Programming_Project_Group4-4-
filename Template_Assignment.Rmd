@@ -1,6 +1,6 @@
 ---
-title: "US Senators Insider Trading"
-author: "Studentnames and studentnumbers here"
+title: "Insider Trading in the US Congress"
+author: "Dewin Erkamps 2739941"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
@@ -70,7 +70,7 @@ head(sp_500_monthly_returns)
 
 ```
 
-For senator_full_data we have 19 variables. Each row represents an individual trade made by a single senator at a given time, and financial information regarding that trade.
+(Describe Source)For senator_full_data we have 19 variables. Each row represents an individual trade made by a single senator at a given time, and financial information regarding that trade.
 
 For SP_500_annual_returns we have 2 variables
 
