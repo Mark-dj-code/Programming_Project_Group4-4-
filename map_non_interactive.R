@@ -15,7 +15,6 @@ congresstrades$state_lower <- tolower(congresstrades$State)
 
 state_trade_counts <- congresstrades %>%
   filter(!is.na(state_lower)) %>%
-  filter(Transaction =="Sale")%>%
   group_by(state_lower) %>%
   summarise(num_trades = n())
 
