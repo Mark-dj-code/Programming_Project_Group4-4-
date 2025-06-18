@@ -13,7 +13,8 @@ install.packages("rnaturalearth")
 install.packages("tidyverse")
 install.packages("dplyr")
 install.packages("zoo")
-
+install.packages("maps")
+install.packages("timechange")
 ```
 
 ```{r packages}
@@ -26,7 +27,8 @@ library(tidyr)
 library(ggplot2)
 library(rnaturalearth)
 library(zoo)
-
+library(maps)
+library(timechange)
 ```
 
 # Title Page
