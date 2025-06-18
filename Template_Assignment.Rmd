@@ -74,6 +74,10 @@ For SP_500_annual_returns we have 2 variables
 
 These are things that are usually included in the metadata of the dataset. For your project, you need to provide us with the information from your metadata that we need to understand your dataset of choice.
 
+Limitations of the Datasets:
+
+One major problem of the datasets used in this research is that its data entries are not standardized. For example, date fields are frequently saved as simple text rather than as organized date objects, which can lead to mistakes during data cleaning and make temporal analysis more difficult. The datasets also includes a lot of incomplete data lines, due to missing disclosures or incorrect filings. By distorting the representation of trading activity and possibly underestimating the timing or frequency of insider trades among Members of Congress, these inconsistencies may greatly affect the validity of the results. It is crucial to handle these data problems in order to guarantee the reliability of any insights gained from the analysis.
+
 ## 2.3 Describe the type of variables included
 
 Think of things like:
@@ -81,6 +85,8 @@ Think of things like:
 -   Do the variables contain health information or SES information?
 
 -   Have they been measured by interviewing individuals or is the data coming from administrative sources?
+
+
 
 *For the sake of this example, I will continue with the assignment...*
 
