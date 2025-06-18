@@ -86,8 +86,6 @@ Think of things like:
 
 -   Have they been measured by interviewing individuals or is the data coming from administrative sources?
 
-
-
 *For the sake of this example, I will continue with the assignment...*
 
 # Part 3 - Quantifying
