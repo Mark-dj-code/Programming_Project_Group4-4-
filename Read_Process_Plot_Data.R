@@ -811,4 +811,3 @@ ggplot(senators_subpop_positive_excess_returns, aes(x = Group)
        title = "Subpopulation by return groups")
 
 
-

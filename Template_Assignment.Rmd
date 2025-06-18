@@ -68,13 +68,17 @@ head(sp_500_monthly_full_data)
 
 ```
 
-(Describe Source)
+(Describe Source) The Standard and Poor 500 annual return is sourced from Macrotrends (<https://www.macrotrends.net/2526/sp-500-historical-annual-returns>).The annual percentage change of the S&P 500 index back to 1927. Performance is calculated as the % change from the last trading day of each year from the last trading day of the previous year.
 
-These are things that are usually included in the metadata of the dataset. For your project, you need to provide us with the information from your metadata that we need to understand your dataset of choice.
+The Standard and Poor 500 monthly return is sourced from Data Hub (<https://datahub.io/core/s-and-p-500#source-data-construction>). This data is a tidied and CSVd version of the data put together by economist Robert Shiller.(<http://www.econ.yale.edu/~shiller/data.htm>) Monthly dividend and earnings data are computed from the S&P four-quarter totals for the quarter since 1926, with linear interpolation to monthly figures. Dividend and earnings data before 1926 are from Cowles and associates, interpolated from annual data. Stock price data are monthly averages of daily closing prices through January 2000, the last month available as this book goes to press. The CPI-U (Consumer Price Index-All Urban Consumers) published by the U.S. Bureau of Labor Statistics begins in 1913; for years before 1913 1 spliced to the CPI Warren and Pearson's price index, by multiplying it by the ratio of the indexes in January 1913. December 1999 and January 2000 values for the CPI-U are extrapolated.
 
-Limitations of the Datasets:
+The Congress trading data is sourced from kaggle, user Shabba Rank (<https://www.kaggle.com/datasets/shabbarank/congressional-trading-inception-to-march-23?select=Copy+of+congress-trading-all+%283%29.csv>), which in turn sources it from Quiver Quantitative (<https://www.quiverquant.com/congresstrading/>). The excess return for each recorded trade is calculated as the differerence between the security's Price Change Since Trade and the SPY 's change since the trade.
 
-One major problem of the datasets used in this research is that its data entries are not standardized. For example, date fields are frequently saved as simple text rather than as organized date objects, which can lead to mistakes during data cleaning and make temporal analysis more difficult. The datasets also includes a lot of incomplete data lines, due to missing disclosures or incorrect filings. By distorting the representation of trading activity and possibly underestimating the timing or frequency of insider trades among Members of Congress, these inconsistencies may greatly affect the validity of the results. It is crucial to handle these data problems in order to guarantee the reliability of any insights gained from the analysis.
+These are things that are usually included in the metadata of the data set. For your project, you need to provide us with the information from your metadata that we need to understand your data set of choice.
+
+Limitations of the Data sets:
+
+One major problem of the datas ets used in this research is that its data entries are not standardized. For example, date fields are frequently saved as simple text rather than as organized date objects, which can lead to mistakes during data cleaning and make temporal analysis more difficult. The data sets also includes a lot of incomplete data lines, due to missing disclosures or incorrect filings. By distorting the representation of trading activity and possibly underestimating the timing or frequency of insider trades among Members of Congress, these inconsistencies may greatly affect the validity of the results. It is crucial to handle these data problems in order to guarantee the reliability of any insights gained from the analysis.
 
 ## 2.3 Describe the type of variables included
 
@@ -85,6 +89,10 @@ Think of things like:
 -   Have they been measured by interviewing individuals or is the data coming from administrative sources?
 
 *For the sake of this example, I will continue with the assignment...*
+
+The S&P 500 annual data contains two variables: a date variable as a character object column and a value column, containing the numeric return computed ass stated above for the year in the corresponding row of the date column.
+
+The S&P 500 monthly data contains 10 variables. This includes date values and for each month the corresponding nominal and real prices, dividends and earnings, as well as Consumer price Index , PE10 and long interest rate.
 
 # Part 3 - Quantifying
 
