@@ -72,7 +72,6 @@ head(sp_500_monthly_returns)
 
 For SP_500_annual_returns we have 2 variables
 
-
 These are things that are usually included in the metadata of the dataset. For your project, you need to provide us with the information from your metadata that we need to understand your dataset of choice.
 
 ## 2.3 Describe the type of variables included
@@ -138,7 +137,13 @@ ggplot(map_data_joined, aes(x = long, y = lat, group = group, fill = num_trades)
   theme_minimal()
 ```
 
-Here you provide a description of why the plot above is relevant to your specific social problem.
+This graph is useful for a study on insider trading in the U.S. since it clearly displays the geographic distribution of congress trades by state, which may help spot unusual or trend-related behavior. For instance:
+
+-   Trade concentrations in certain states, such as New Jersey, California, Texas, and Florida, may indicate centers of political or economic activity where insider information is more easily available or regularly acted upon.
+-   Outliers, like New Jersey, which has an abnormally high trading activity but a relatively small number of representatives, may point to people or groups that should be looked at more closely. However, this will take a more comprehensive and complicated study.
+-   Comparative analysis across states can show whether insider trading is more common in areas with more representation, economic clout, or regulatory laxity.
+
+In general, spatial visualization facilitates a more in-depth investigation of the locations of insider trading and the potential driving factors.
 
 ## 3.5 Visualize sub-population variation
 
