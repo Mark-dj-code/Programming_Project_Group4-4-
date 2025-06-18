@@ -119,7 +119,11 @@ Variable 2
 ## 3.4 Visualize spatial variation
 
 ```{r visualise_map}
-s_states <- map_data("state")
+library(ggplot2)
+library(dplyr)
+library(maps)
+
+us_states <- map_data("state")
 congresstrades$state_lower <- tolower(congresstrades$State)
 
 state_trade_counts <- congresstrades %>%
