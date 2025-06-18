@@ -272,7 +272,7 @@ senators_full_data_by_year <- arrange(senators_full_data_by_year, desc(net_retur
 
 sp_500_monthly_full_data <- read.csv("data/sp500_monthly.csv")
 
-## change Date column from characater to date object
+## change Date column from character to date object
 
 sp_500_monthly_full_data<- sp_500_monthly_full_data |>
   mutate(Date = as.Date(Date))
@@ -296,6 +296,8 @@ while( position < 1833 ) {
 #change column name to something more intuitive
 
 colnames(sp_500_monthly_full_data)[2] <- "price"
+
+
 
 ## calculate monthly return by using lag function 
 
@@ -639,7 +641,7 @@ ggplot(us_states_returns_map_2015, aes(fill = weighted_average_excess_return)) +
 ####################################################
 ##
 ##
-## Map of average excess return per state for all years 2012 --> 2024
+## Map of net return excess percentage per state for all years 2012 --> 2024
 ##
 ##
 #####################################################
@@ -650,7 +652,7 @@ average_market_return_over_time <- mean(SP_500_annual_returns$SP_500_return[85:9
 
 
 
-## group data by state in new dataframe, sum abnormal return size over states for all years
+## group data by state in new data frame, sum abnormal return size over states for all years
 
 library(tidyverse)
 library(dplyr)
@@ -660,10 +662,15 @@ returns_by_state <- senators_full_data |>
   summarize(weighted_average_return_per_state = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop")
 
 
-### new variable is difference between average return per state and average market return
+### new variable State net return percentage quantifies how much more (or less) did the congress members outperform (or under perform) compared to the market in %
 
 returns_by_state <- returns_by_state |>
-  mutate( State_average_abnormal_return = 100*( weighted_average_return_per_state - average_market_return_over_time )/abs(average_market_return_over_time))
+  mutate(net_return_magnitude = weighted_average_return_per_state + average_market_return_over_time, 
+         
+         state_net_return_percentage = ifelse(average_market_return_over_time > net_return_magnitude,
+                                         -100*abs(average_market_return_over_time - net_return_magnitude)/abs(average_market_return_over_time),
+                                         100*abs(net_return_magnitude - average_market_return_over_time)/abs(average_market_return_over_time)  ),
+  )
 
 ### remove alaska and hawaii
 
@@ -694,11 +701,13 @@ us_states_returns_map <- us_states_map |>
 
 #plot merged data
 
-ggplot(us_states_returns_map, aes(fill = State_average_abnormal_return)) +
-  geom_sf( color = "white", size = 0.2 ) +
-  scale_fill_gradient(low = "white", high = "red",
-                      name = "Average market\noutperformance per state\n(in%) from 2012 to 2024"
-  )
+ggplot(us_states_returns_map, aes(fill = state_net_return_percentage)) +
+  geom_sf( color = "black", size = 0.2 ) +
+  
+scale_fill_gradient2(low = "red", mid = "white", high = "green", midpoint = 0,
+                     name = "Average market\noutperformance per state\n(in%) from 2012 to 2024") +
+  theme_minimal()
+  
 
 
 
@@ -779,20 +788,26 @@ ggplot(returns_per_year_per_party, aes(x = as.factor(Trade_year),
 
 library(tidyverse)
 library(dplyr)
-senators_subpop_high_returns <- senators_full_data |>
+
+## Get weighted avg excess retrun for each individual congress memeber in the data (Group by name)
+
+senators_subpop_positive_excess_returns <- senators_full_data |>
   group_by(Name) |>
-  summarize(weighted_avg_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
+  summarize(weighted_avg_excess_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
 
-senators_subpop_high_returns <- senators_subpop_high_returns |>
-  mutate(Group = ifelse (weighted_avg_return > 100, "Return>100%", "Return<=100"))
+## add a Group column (categrorical variable) to group vongress members into positive and negative excess return groups
+senators_subpop_positive_excess_returns <- senators_subpop_positive_excess_returns |>
+  mutate(Group = ifelse (weighted_avg_excess_return > 0, "Higher than market ", "Lower than market"))
 
-ggplot(senators_subpop_high_returns, aes(x = Group)
+## Plot the number of congress memebers in each group
+ggplot(senators_subpop_positive_excess_returns, aes(x = Group)
                                        ) +
   
-  geom_bar(fill ="green") +
+  geom_bar(fill ="blue",
+           width = 0.3,) +
   
-  labs(x = "Congress members divided by return size",
-       y = "Number of memebrs",
+  labs(x = "Congress members divided by excess return",
+       y = "Number of members",
        title = "Subpopulation by return groups")
 
 
