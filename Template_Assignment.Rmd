@@ -1,6 +1,6 @@
 ---
 title: "Insider Trading in the US Congress"
-author: "Dewin Erkamps 2739941, Alec van der Heijde 2852988, Berend Hol, Dangy Hlynsdóttir, Giovanni Boba, Joshua Azadi and Mark de Jongh"
+author: "Dewin Erkamps 2739941, Alec van der Heijde 2852988, Berend Hol, Dagný Hlynsdóttir 2841038, Giovanni Boba, Joshua Azadi and Mark de Jongh"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
@@ -35,7 +35,7 @@ library(maps)
 
 Dewin Erkamps, Alec van der Heijde, Berend Hol, Dangy Hlynsdóttir, Giovanni Vittorio Boba, Joshua Azadi and Mark de Jongh
 
-Goup 4 (4)
+Group 4 (4)
 
 C. Schouwenaar (Chantal)
 
