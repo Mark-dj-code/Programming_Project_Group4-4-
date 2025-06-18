@@ -45,12 +45,7 @@ Use APA referencing throughout your document. [Here's a link to some explanation
 
 ## 1.1 Describe the Social Problem
 
-It was a “great time to buy”, Donald Trump has published on his social media just hours before that he made a dramatic trade war that led to big rises in stock markets. After that, The democratic senator Chris Murphy mentioned on his social media that Trump was eager to make money by using private info that he only knew. When White House officials announced that it was his art of the deal , others considered this as an infraction of rules.
-Public confidence in members of congress' ability to act in the best interests of the country, uninfluenced by personal financial incentives, is essential to maintaining the integrity of democratic institutions. However, recent studies have brought up worries about possible conflicts of interest resulting from American congress members' stock market dealings. A significant study published by Abdurakhmonov et al. discovered that U.S. senators' stock purchases frequently resulted in abnormal positive returns, especially when the senators had jurisdiction over the companies through committee assignments or when the companies had made political connections, such as through lobbying or political donations.
-The Stop Trading on Congressional Knowledge (STOCK) Act of 2012 sought to address insider trading by forcing members of Congress to make prompt financial transaction disclosures, but enforcement has been difficult. For example, in the beginning of the COVID-19 pandemic in 2020, a number of senators came under fire for stock market activity that occurred after they had received classified briefings. The current regulatory system may have flaws, as evidenced by the fact that no charges have been brought despite the start of the current framework.
-In response, legislative attempts have continued to these persistent concerns. By expressly defining and prohibiting such behavior, the Insider Trading Prohibition Act (H.R. 2655), which the House approved in 2021, seeks to strengthen prohibitions against trading on material, nonpublic information.
-The goal of this programming project is to evaluate publicly accessible financial disclosure data in order to find patterns that might point to insider trading by members of congress. By developing tools that analyze congressional financial disclosures and highlight possible illegal transactions, this programming project seeks to help correct that disparity. This initiative aims to increase the transparency of these financial activities by employing data science and programming methods to link transactions to market happenings, legislative changes, and committee assignments.
-This project ultimately gives the public and watchdog groups the power to hold congress accountable, support a fairer system, and backs the idea that nobody, especially those in positions of authority, should be exempt from the laws that govern everyone else.
+It was a “great time to buy”, Donald Trump has published on his social media just hours before that he made a dramatic trade war that led to big rises in stock markets. After that, The democratic senator Chris Murphy mentioned on his social media that Trump was eager to make money by using private info that he only knew. When White House officials announced that it was his art of the deal , others considered this as an infraction of rules. Public confidence in members of congress' ability to act in the best interests of the country, uninfluenced by personal financial incentives, is essential to maintaining the integrity of democratic institutions. However, recent studies have brought up worries about possible conflicts of interest resulting from American congress members' stock market dealings. A significant study published by Abdurakhmonov et al. discovered that U.S. senators' stock purchases frequently resulted in abnormal positive returns, especially when the senators had jurisdiction over the companies through committee assignments or when the companies had made political connections, such as through lobbying or political donations. The Stop Trading on Congressional Knowledge (STOCK) Act of 2012 sought to address insider trading by forcing members of Congress to make prompt financial transaction disclosures, but enforcement has been difficult. For example, in the beginning of the COVID-19 pandemic in 2020, a number of senators came under fire for stock market activity that occurred after they had received classified briefings. The current regulatory system may have flaws, as evidenced by the fact that no charges have been brought despite the start of the current framework. In response, legislative attempts have continued to these persistent concerns. By expressly defining and prohibiting such behavior, the Insider Trading Prohibition Act (H.R. 2655), which the House approved in 2021, seeks to strengthen prohibitions against trading on material, nonpublic information. The goal of this programming project is to evaluate publicly accessible financial disclosure data in order to find patterns that might point to insider trading by members of congress. By developing tools that analyze congressional financial disclosures and highlight possible illegal transactions, this programming project seeks to help correct that disparity. This initiative aims to increase the transparency of these financial activities by employing data science and programming methods to link transactions to market happenings, legislative changes, and committee assignments. This project ultimately gives the public and watchdog groups the power to hold congress accountable, support a fairer system, and backs the idea that nobody, especially those in positions of authority, should be exempt from the laws that govern everyone else.
 
 # Part 2 - Data Sourcing
 
@@ -77,9 +72,6 @@ head(sp_500_monthly_returns)
 
 For SP_500_annual_returns we have 2 variables
 
-``` r
-inline_code = TRUE
-```
 
 These are things that are usually included in the metadata of the dataset. For your project, you need to provide us with the information from your metadata that we need to understand your dataset of choice.
 
@@ -128,7 +120,22 @@ Variable 2
 ## 3.4 Visualize spatial variation
 
 ```{r visualise_map}
+s_states <- map_data("state")
+congresstrades$state_lower <- tolower(congresstrades$State)
 
+state_trade_counts <- congresstrades %>%
+  filter(!is.na(state_lower)) %>%
+  group_by(state_lower) %>%
+  summarise(num_trades = n())
+
+map_data_joined <- left_join(us_states, state_trade_counts, by = c("region" = "state_lower"))
+
+ggplot(map_data_joined, aes(x = long, y = lat, group = group, fill = num_trades)) +
+  geom_polygon(color = "white") +
+  coord_fixed(1.3) +
+  scale_fill_gradient(low = "lightblue", high = "darkblue", na.value = "grey90") +
+  labs(title = "Number of Trades by State", fill = "Trade Count") +
+  theme_minimal()
 ```
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
