@@ -127,7 +127,7 @@ senators_full_data <- senators_full_data|>
   ) 
 ```
 
-Keep only Sale transactions : only interested in realized returns of congress members
+Keep only Sale transactions: only interested in realized returns of congress members
 
 ```{r data cleaning}
 senators_full_data <- senators_full_data |>
@@ -373,7 +373,6 @@ This graph is useful for a study on insider trading in the U.S. since it clearly
 -   Trade concentrations in certain states, such as New Jersey, California, Texas, and Florida, may indicate centers of political or economic activity where insider information is more easily available or regularly acted upon.
 -   Outliers, like New Jersey, which has an abnormally high trading activity but a relatively small number of representatives, may point to people or groups that should be looked at more closely. However, this will take a more comprehensive and complicated study.
 -   Comparative analysis across states can show whether insider trading is more common in areas with more representation, economic clout, or regulatory laxity.
-
 
 ```{r map visualisation 2}
 ####################################################
