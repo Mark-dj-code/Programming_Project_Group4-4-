@@ -148,7 +148,7 @@ sp_500_monthly_full_data<- sp_500_monthly_full_data |>
   mutate(Date = as.Date(Date))
 ```
 
-Month of October is not displayed properly month = 01, instead of month =10 modify that and change it
+Month of October is not displayed properly month = 01, instead of month = 10 modify that and change it
 
 ```{r data cleaning}
 
