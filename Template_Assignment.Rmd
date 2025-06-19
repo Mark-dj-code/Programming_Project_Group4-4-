@@ -78,7 +78,7 @@ These are things that are usually included in the metadata of the data set. For 
 
 Limitations of the Data sets:
 
-One major problem of the datas ets used in this research is that its data entries are not standardized. For example, date fields are frequently saved as simple text rather than as organized date objects, which can lead to mistakes during data cleaning and make temporal analysis more difficult. The data sets also includes a lot of incomplete data lines, due to missing disclosures or incorrect filings. By distorting the representation of trading activity and possibly underestimating the timing or frequency of insider trades among Members of Congress, these inconsistencies may greatly affect the validity of the results. It is crucial to handle these data problems in order to guarantee the reliability of any insights gained from the analysis.
+One major problem of the datasets used in this research is that its data entries are not standardized. For example, date fields are frequently saved as simple text rather than as organized date objects, which can lead to mistakes during data cleaning and make temporal analysis more difficult. The data sets also includes a lot of incomplete data lines, due to missing disclosures or incorrect filings. By distorting the representation of trading activity and possibly underestimating the timing or frequency of insider trades among Members of Congress, these inconsistencies may greatly affect the validity of the results. It is crucial to handle these data problems in order to guarantee the reliability of any insights gained from the analysis.
 
 ## 2.3 Describe the type of variables included
 
@@ -374,7 +374,6 @@ This graph is useful for a study on insider trading in the U.S. since it clearly
 -   Outliers, like New Jersey, which has an abnormally high trading activity but a relatively small number of representatives, may point to people or groups that should be looked at more closely. However, this will take a more comprehensive and complicated study.
 -   Comparative analysis across states can show whether insider trading is more common in areas with more representation, economic clout, or regulatory laxity.
 
-In general, spatial visualization facilitates a more in-depth investigation of the locations of insider trading and the potential driving factors.
 
 ```{r map visualisation 2}
 ####################################################
