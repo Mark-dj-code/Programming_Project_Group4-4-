@@ -1,6 +1,6 @@
 ---
 title: "Insider Trading in the US Congress"
-author: "Dewin Erkamps 2739941, Alec van der Heijde 2852988, Berend Hol, Dagný Hlynsdóttir 2841038, Giovanni Boba, Joshua Azadi and Mark de Jongh"
+author: "Dewin Erkamps 2739941, Alec van der Heijde 2852988, Berend Hol, Dagný Hlynsdóttir 2841038, Giovanni Boba, Joshua Azadi and Mark de Jongh 2865081"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
@@ -430,7 +430,7 @@ ggplot(senators_subpop_positive_excess_returns, aes(x = Group)
 
 ```
 
-Plotting the number of congress members with higher return rates than the market and comparing tit to the number of congress members with return rates lower than that of the market helps us understand whether the majority of is capable of achieving abnormal returns through insider trading. If there is a large proportion of congress members with positive excess returns that could hint at the presence of widespread access to insider information.
+Plotting the number of congress members with higher return rates than the market and comparing it to the number of congress members with return rates lower than that of the market helps us understand whether the majority of is capable of achieving abnormal returns through insider trading. If there is a large proportion of congress members with positive excess returns that could hint at the presence of widespread access to insider information.
 
 ## 3.6 Event analysis
 
