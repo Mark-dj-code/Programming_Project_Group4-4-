@@ -479,6 +479,12 @@ This plot compares
 # Part 4 - Discussion
 
 ## 4.1 Discuss your findings
+Our investigation into potential insider trading among U.S. Congress members aimed to identify patterns of abnormal returns by comparing Senate trading activity with general market performance. 
+When calculating excess returns, we found that more than half of the Congress members generated negative excess returns, meaning their net returns were lower than those of the overall market. This finding challenges the notion that insider information is helping members achieve superior investment performance.
+A temporal analysis of congressional returns versus market performance from 2012 to 2024 shows relatively stable fluctuations in congressional returns, with notable spikes in 2015, 2016, and 2022. Interestingly, during the onset of the COVID-19 pandemic, congressional returns spiked while the market declined. This discrepancy raises concerns about whether members may have benefited from privileged, non-public information.
+When examining performance by state, Kansas, Tennessee, and Washington stood out, with members from these states consistently outperforming the market over the study period. In terms of political party, both major parties had a comparable number of trades. However, Republicans showed higher average returns until 2017, after which Democrats began to outperform in terms of excess returns.
+Despite these insights, limitations such as incomplete or missing disclosures hindered the depth and precision of our analysis. To fully assess the extent and impact of potential insider trading in Congress, more comprehensive and transparent data is essential. Nevertheless, our findings highlight concerns about transparency and accountability in the financial activities of lawmakers.
+
 
 # Part 5 - Reproducibility
 
