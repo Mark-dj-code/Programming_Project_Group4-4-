@@ -488,12 +488,12 @@ Provide the link to your PUBLIC repository here: ...
 
 Abdurakhmonov, M., Snider, R. E., Ridge, J. W., & Hasija, D. (2022). Perceptions of political Self‐Dealing ? An empirical investigation of market returns surrounding the disclosure of politician stock purchases. Strategic Management Journal. https://sms.onlinelibrary.wiley.com/doi/10.1002/smj.3459
 
-Almeida, L. (2025, April 10). Trump ignites “insider trading” accusations after global tariffs U-turn. The Guardian; The Guardian. https://www.theguardian.com/us-news/2025/apr/10/donald-trump-ignites-insider-trading-accusations-after-global-tariffs-u-turn
-
 Congressional Stock Trading and the STOCK Act. (2025). Campaign Legal Center. https://campaignlegal.org/update/congressional-stock-trading-and-stock-act 
 
-Shiller, R.  (2005). Online Data: US Stock Markets 1871-Present and CAPE Ratio [Dataset] http://www.econ.yale.edu/~shiller/data.htm
+Himes, J. A. (2021, May 19). Text - H.R.2655 - 117th Congress (2021-2022): Insider Trading Prohibition Act. Www.congress.gov. https://www.congress.gov/bill/117th-congress/house-bill/2655/text
 
-Macrotrends. (z.d.). S&P 500 Historical Annual Returns [Dataset]. https://www.macrotrends.net/2526/sp-500-historical-annual-returns
+Macrotrends. (n.d.). S&P 500 Historical Annual Returns [Dataset]. https://www.macrotrends.net/2526/sp-500-historical-annual-returns
+
+Shiller, R.  (2005). Online Data: US Stock Markets 1871-Present and CAPE Ratio [Dataset] http://www.econ.yale.edu/~shiller/data.htm
 
 Shabba Rank. (2023). Congressional Trading (Inception to March 23) [Dataset]. Kaggle. https://www.kaggle.com/datasets/shabbarank/congressional-trading-inception-to-march-23?select=Copy+of+congress-trading-all+%283%29.csv
