@@ -82,14 +82,6 @@ One major problem of the datasets used in this research is that its data entries
 
 ## 2.3 Describe the type of variables included
 
-Think of things like:
-
--   Do the variables contain health information or SES information?
-
--   Have they been measured by interviewing individuals or is the data coming from administrative sources?
-
-*For the sake of this example, I will continue with the assignment...*
-
 The S&P 500 annual data contains two variables: a date variable as a character object column and a value column, containing the numeric return computed ass stated above for the year in the corresponding row of the date column.
 
 The S&P 500 monthly data contains 10 variables. This includes date values and for each month the corresponding nominal and real prices, dividends and earnings, as well as Consumer price Index , PE10 and long interest rate.
@@ -178,8 +170,6 @@ Changing value column name
 ```{r data cleaning}
 colnames(SP_500_annual_returns)[2] <- "SP_500_return"
 ```
-
-Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
 
 ## 3.2 Generate necessary variables
 
