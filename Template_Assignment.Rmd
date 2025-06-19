@@ -418,7 +418,7 @@ scale_fill_gradient2(low = "red", mid = "white", high = "green", midpoint = 0,
 
 ## 3.5 Visualize sub-population variation
 
-What is the number of congress members that beat the market from 2012 to 2024 ?
+What is the number of congress members that beat the market from 2012 to 2024?
 
 ```{r visualise_subpopulations}
 
