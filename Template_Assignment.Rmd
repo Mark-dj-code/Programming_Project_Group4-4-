@@ -183,7 +183,7 @@ Please use a separate 'R block' of code for each type of cleaning. So, e.g. one 
 
 ## 3.2 Generate necessary variables
 
-Variable 1
+Variable 1:
 
 ```{r gen_var1}
 senators_full_data <- senators_full_data|>
@@ -191,7 +191,7 @@ senators_full_data <- senators_full_data|>
           Trade_month = floor_date(as.Date(Traded), unit = "month") )# add trade month column 
 ```
 
-Calculate weighted average excess return by state over entire period
+Calculate weighted average excess return by state over entire period:
 
 ```{r gen_var2}
 returns_by_state <- senators_full_data |>
@@ -199,13 +199,13 @@ returns_by_state <- senators_full_data |>
   summarize(weighted_average_return_per_state = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop")
 ```
 
-Calculate average S&P 500 return over entire period from annual historical data
+Calculate average S&P 500 return over entire period from annual historical data:
 
 ```{r gen_var3}
 average_market_return_over_time <- mean(SP_500_annual_returns$SP_500_return[85:98])
 ```
 
-Calculate net return size per state
+Calculate net return size per state:
 
 ```{r gen_var4}
 returns_by_state <- returns_by_state |>
@@ -213,7 +213,7 @@ returns_by_state <- returns_by_state |>
   )
 ```
 
-Calculate net return out-performance(under-performance) percentage
+Calculate net return out-performance(under-performance) percentage:
 
 ```{r gen_var5}
 returns_by_state <- returns_by_state |>
@@ -223,7 +223,7 @@ returns_by_state <- returns_by_state |>
   )
 ```
 
-Calculate monthly return using price and dividend
+Calculate monthly return using price and dividend:
 
 ```{r gen_var6}
 sp_500_monthly_full_data <- sp_500_monthly_full_data |>
@@ -231,7 +231,7 @@ sp_500_monthly_full_data <- sp_500_monthly_full_data |>
          sp_500_monthly_return = 100*((price + Dividend - price_prior_month )/price_prior_month ) )
 ```
 
-Calculate weighted average excess return for each individual congress member
+Calculate weighted average excess return for each individual congress member:
 
 ```{r gen_var7}
 senators_subpop_positive_excess_returns <- senators_full_data |>
@@ -239,7 +239,7 @@ senators_subpop_positive_excess_returns <- senators_full_data |>
   summarize(weighted_avg_excess_return = sum(Trade_Size_USD*excess_return, na.rm = T)/sum(Trade_Size_USD, na.rm = T ), .groups = "drop" )
 ```
 
-Add a Group column (categorical variable) to group congress members into positive and negative excess return groups
+Add a Group column (categorical variable) to group congress members into positive and negative excess return groups:
 
 ```{r gen_var8}
 senators_subpop_positive_excess_returns <- senators_subpop_positive_excess_returns |>
@@ -346,7 +346,9 @@ reshaped_monthly_returns |>
            color = "black")
 ```
 
-This shows how the return of congress members' trades react to changes in the market through time. It can reveal if congress members can anticipate changes in the market, and show the difference between the excess return and the risk free rate.This is useful to get an idea of the net return of congress members at any point in time. This can reveal possible use of insider information. \## 3.4 Visualize spatial variation
+This shows how the return of congress members' trades react to changes in the market through time. It can reveal if congress members can anticipate changes in the market, and show the difference between the excess return and the risk free rate.This is useful to get an idea of the net return of congress members at any point in time. This can reveal possible use of insider information.
+
+## 3.4 Visualize spatial variation
 
 ```{r visualise_map}
 
